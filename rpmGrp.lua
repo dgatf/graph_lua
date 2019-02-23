@@ -35,7 +35,6 @@ end
 
 function List.dequeue (list)
   local first = list.first
-  --if first > list.last then error("list is empty") end
   local value = list[first]
   list[first] = nil
   list.first = first + 1
@@ -44,34 +43,6 @@ end
 
 function List.size (list)
   return list.last-list.first
-end
-
--- Read line function
-
-local function readLine(configFile)
-  local lineString = ''
-  local char
-  repeat
-    char = io.read(configFile,1)
-    if char ~='\n' then lineString = lineString .. char end
-  until char == '\n' or char == ''
-  if char == '' then eof = true else eof = false end
-  return lineString, eof
-end
-
--- Read config function
-
-local function readConfig(configFile)
-  local lineString, eof
-    config.field,eof = readLine(configFile)
-    config.field,eof = readLine(configFile)
-    config.mode,eof = readLine(configFile)
-    config.field,eof = readLine(configFile)
-    config.mode,eof = readLine(configFile)
-    config.duration,eof = readLine(configFile)
-    if eof then 
-      --saveConfig()
-    end
 end
 
 -- Draw Value function
@@ -86,20 +57,10 @@ end
 -- Init function
 
 local function init_func()
-
-  -- Read config
-
-  --local configFile = io.open('/SCRIPTS/TELEMETRY/rpm.cfg','r')
-  --if configFile ~= nil then
-  --  readConfig(configFile)
-  --  io.close(configFile)
-  --end
-
   lcd.clear()
   timeStep = config.duration/(LCD_W-margin.left-margin.right)
   timeStamp = getTime()/100
   graphData = List.new()
-
 end
 
 -- Background function
@@ -122,7 +83,7 @@ local function run_func(event)
     lcd.drawText(LCD_W-margin.right-10, LCD_H-7, config.duration, SMLSIZE)
   end
 
-  -- Graph value
+  -- Graph field
 
   value = getValue(config.field)
   lcd.drawText(LCD_W-margin.right+1, 15, value .. '      ', MIDSIZE)
@@ -134,6 +95,7 @@ local function run_func(event)
   end
 
   -- Field 2
+
   lcd.drawText(LCD_W-margin.right+2, 45, getValue(config.field2) .. '      ', MIDSIZE)
 
   refresh = 0
